@@ -22,8 +22,10 @@
     };
   };
 
-  # TODO: machine won't resume from sleep (at least when on battery).  This
-  # is true whether or not the kaby-lake import above is active or not.
+  # TODO: machine won't resume from sleep (at least when on battery and in
+  # offload mode).  This is true whether or not the kaby-lake import above is
+  # active or not.  When on AC, the machine either wakes up from sleep before
+  # being asked to, or it appears to sleep and resume properly.
 
   # NB: the p53 profile uses throttled to prevent too-eager CPU
   # throttling instead of thermald.  I understand throttled to have been a
