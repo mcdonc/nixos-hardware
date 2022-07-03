@@ -3,7 +3,7 @@
   imports = [
     ../../../common/gpu/nvidia.nix
     ../../../common/cpu/intel
-    ../../../common/cpu/intel/kaby-lake
+    #../../../common/cpu/intel/kaby-lake
     ../../../common/pc/laptop/acpi_call.nix
     ../.
   ];
@@ -21,6 +21,9 @@
       driSupport32Bit = lib.mkDefault true;
     };
   };
+
+  # TODO: machine won't resume from sleep (at least when on battery).  This
+  # is true whether or not the kaby-lake import above is active or not.
 
   # NB: the p53 profile uses throttled to prevent too-eager CPU
   # throttling instead of thermald.  I understand throttled to have been a
