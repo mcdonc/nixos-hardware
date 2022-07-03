@@ -22,7 +22,7 @@
     };
   };
 
-  # Note that the p53 profile uses throttled to prevent too-eager CPU
+  # NB: the p53 profile uses throttled to prevent too-eager CPU
   # throttling instead of thermald.  I understand throttled to have been a
   # workaround solution at the time that profile was created.  Thermald would
   # have been preferred if it worked at the time. I read
