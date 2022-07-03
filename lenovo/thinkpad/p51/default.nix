@@ -1,8 +1,9 @@
-{ nixos, pkgs, lib, config, stdenv, ... }:
+{ lib, ... }:
 {
   imports = [
-    ../../../common/cpu/intel
     ../../../common/gpu/nvidia.nix
+    ../../../common/cpu/intel
+    ../../../common/cpu/intel/kaby-lake
     ../../../common/pc/laptop/acpi_call.nix
     ../.
   ];
@@ -15,18 +16,20 @@
       };
     };
 
-    # other opengl stuff is included via <nixos-hardware/common/cpu/intel> and
-    # <nixos-hardware/common/gpu/nvidia.nix>.  I'm not sure enabling DRI here
-    # is too aggressive.  Maybe try without and see what happens to steam and
-    # accelerated video in Chromium/FF.
     opengl = {
       driSupport = lib.mkDefault true;
       driSupport32Bit = lib.mkDefault true;
     };
   };
 
-  # note that the p53 profile uses throttled instead; I read
+  # Note that the p53 profile uses throttled to prevent too-eager CPU
+  # throttling instead of thermald.  I understand throttled to have been a
+  # workaround solution at the time that profile was created.  Thermald would
+  # have been preferred if it worked at the time. I read
   # https://wiki.archlinux.org/title/Lenovo_ThinkPad_X1_Carbon_(Gen_6)#Power_management.2FThrottling_issues
-  # as saying that this is no longer necessary.
+  # as saying that throttled is no longer necessary given version 5.12+ of the
+  # kernel combined with version 2.4.3+ of thermald.  At the time of this
+  # writing, the stable NixOS kernel is 5.15 and 2.4.9 of thermald.  So we use
+  # thermald.
   services.thermald.enable = lib.mkDefault true;
 }
