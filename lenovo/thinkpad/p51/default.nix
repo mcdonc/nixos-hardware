@@ -22,7 +22,11 @@
     };
   };
 
-  # TODO:
+  # TODO
+  # ====
+  #
+  # Sleep
+  # -----
   #
   # In offload mode, the system will not resume from sleep properly while on
   # battery power.  When it tries to resume, it gets to a state with a cursor
@@ -58,7 +62,17 @@
   # AHA!  It actually sleeps and resumes reliably, at least in offload mode, on
   # battery, when tlp is disabled.
   #
-
+  # All of the above was "solved" by disabling runtime power management.
+  #
+  # External monitor
+  # ----------------
+  #
+  # Connecting an external monitor via the DP port in sync mode does not seem to
+  # make it available.
+  #
+  # throttled vs. thermald
+  # -----------------------
+  #
   # NB: the p53 profile currently uses throttled to prevent too-eager CPU
   # throttling.  I understand throttled to have been a workaround solution at
   # the time the p53 profile was created (throttled's original name was
@@ -83,6 +97,7 @@
   # when it's stressed and it allows the average temps to get a degree or two
   # higher when running throttled than when running in the other two scenarios,
   # but still substantially under critical temp.
+
   services.throttled.enable = lib.mkDefault true;
 
 }
