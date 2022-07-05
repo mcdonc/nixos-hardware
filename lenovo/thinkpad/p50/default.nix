@@ -25,12 +25,12 @@
   # Sleep
   # -----
   #
-  # In offload mode, the system will not resume from sleep properly while on
-  # battery power.  When it tries to resume, it gets to a state with a cursor
-  # in the top left hand side of the panel, the power LED goes from flashing to
-  # solid, and thereafter cannot be interacted with (even over SSH) and must be
-  # power cycled forcefully.  Sometimes it doesn't even finish going to sleep before
-  # this behavior kicks in.
+  # The system will not resume from sleep properly while on battery power in
+  # either offload mode or sync mode.  When it tries to resume, it gets to a
+  # state with a cursor in the top left hand side of the panel, the power LED
+  # goes from flashing to solid, and thereafter cannot be interacted with (even
+  # over SSH) and must be power cycled forcefully.  Sometimes it doesn't even
+  # finish going to sleep before this behavior kicks in.
   #
   # When on AC, the machine either wakes up from sleep before being asked to
   # (or maybe never gets to sleep state), or it goes into a sleep state and it
