@@ -24,47 +24,14 @@
   # Sleep
   # -----
   #
-  # The system will not resume from sleep properly while on battery power in
-  # either offload mode or sync mode.  When it tries to resume, it gets to a
-  # state with a cursor in the top left hand side of the panel, the power LED
-  # goes from flashing to solid, and thereafter cannot be interacted with (even
-  # over SSH) and must be power cycled forcefully.  Sometimes it doesn't even
-  # finish going to sleep before this behavior kicks in.
-  #
-  # When on AC, the machine either wakes up from sleep before being asked to
-  # (or maybe never gets to sleep state), or it goes into a sleep state and it
-  # appears consistently resume properly when it does.
-  #
-  # But the machine actually sleeps and resumes reliably when tlp is disabled
-  # fully or partially.  Disabling RUNTIME_PM and AHCI_RUNTIME_PM appears to be
-  # enough to allow it to work when tlp is active.  I couldn't figure out a
-  # more granular way to get it working, despite trying to do a per-device
-  # binary search via powertop.
-  #
-  # My personal configuration to make sleep work looks like this:
-  #
-  # {config, lib, ...}:
-  #
-  # {
-  #   services.tlp = {
-  #     settings = {
-  #       # DISK_DEVICES must be specified for AHCI_RUNTIME_PM settings to work right.
-  #       DISK_DEVICES = "nvme0n1 nvme1n1 sda sdb";
-  #
-  #       # with AHCI_RUNTIME_PM_ON_AC/BAT set to defaults in battery mode, P51
-  #       # can't resume from sleep and P50 can't go to sleep.
-  #       AHCI_RUNTIME_PM_ON_AC = "on";
-  #       AHCI_RUNTIME_PM_ON_BAT = "on";
-  #
-  #       # with RUNTIME_PM_ON_BAT/AC set to defaults, P50/P51 can't go to sleep
-  #       RUNTIME_PM_ON_AC = "on";
-  #       RUNTIME_PM_ON_BAT = "on";
-  #     };
-  #   };
-  # }
-  #
-  # I'm thinking this is too aggressive to put into shared config, and folks may
-  # be concerned with the hit on battery life.
+  # The system will not stay asleep properly while on battery power or AC in
+  # either offload mode or sync mode.  This is true whether TLP is enabled or
+  # disabled.  When the system is told to sleep, it will appear to go into a
+  # sleep state, but within five minutes (and sometimes much more quickly; in
+  # my case especially if a USB hub is connected), it will wake itself.  I
+  # attempted to identify what was causing this to happen, but was not
+  # successful.  Note that this behavior is different from that of the P50 or
+  # P51, both of which can be convinced to sleep by changing TLP config.
   #
   # throttled vs. thermald
   # -----------------------
