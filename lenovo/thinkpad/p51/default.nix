@@ -3,7 +3,7 @@
   imports = [
     ../../../common/gpu/nvidia.nix
     ../../../common/cpu/intel
-    #../../../common/cpu/intel/kaby-lake
+    ../../../common/cpu/intel/kaby-lake
     ../../../common/pc/laptop/acpi_call.nix
     ../.
   ];
@@ -16,15 +16,13 @@
       };
     };
 
+    # is this too much?  It's convenient for Steam.
     opengl = {
       driSupport = lib.mkDefault true;
       driSupport32Bit = lib.mkDefault true;
     };
   };
 
-  # TODO
-  # ====
-  #
   # Sleep
   # -----
   #
@@ -39,36 +37,35 @@
   # (or maybe never gets to sleep state), or it goes into a sleep state and it
   # appears consistently resume properly when it does.
   #
-  # These behaviors are true whether or not the kaby-lake import above is
-  # active or not.  Things are marginally improved by doing
-  # "hardware.nvidia.powerManagement.enable = true", as the machine then may
-  # sleep and resume even on battery the first time you try it, but second and
-  # subsequent times either fail to sleep or fail to resume in the same way as
-  # described above.
+  # But the machine actually sleeps and resumes reliably when tlp is disabled
+  # fully or partially.  Disabling RUNTIME_PM and AHCI_RUNTIME_PM appears to be
+  # enough to allow it to work when tlp is active.  I couldn't figure out a
+  # more granular way to get it working, despite trying to do a per-device
+  # binary search via powertop.
   #
-  # In sync mode.. TBD.
+  # My personal configuration to make this work looks like this:
   #
-  # Potentially useful resource:
-  # https://askubuntu.com/questions/1032633/18-04-screen-remains-blank-after-wake-up-from-suspend/1391917#1391917
-  # although I do not see the same stack traces in the journalctl log as the OP.  I see no stack traces in the journalctl log at all, I just see something like this when
+  # {config, lib, ...}:
+  # {
+  #   services.tlp = {
+  #     settings = {
+  #       # DISK_DEVICES must be specified for AHCI_RUNTIME_PM settings to work right.
+  #       DISK_DEVICES = "nvme0n1 nvme1n1 sda sdb";
   #
-  # The situation in which the machine seemingly goes to sleep for a couple of
-  # seconds and then immediately rewakes may be related to this journalctl
-  # entry Jul 03 13:55:55.186089 thinknix51 kernel: ahci 0000:00:17.0: port
-  # does not support device sleep.  This is rumored by
-  # https://groups.google.com/g/linux.debian.kernel/c/h6bX96m8ixc?pli=1 to be
-  # related to too-aggressive "link power management."
+  #       # with AHCI_RUNTIME_PM_ON_AC/BAT set to defaults in battery mode, P51
+  #       # can't resume from sleep and P50 can't go to sleep.
+  #       AHCI_RUNTIME_PM_ON_AC = "on";
+  #       AHCI_RUNTIME_PM_ON_BAT = "on";
   #
-  # AHA!  It actually sleeps and resumes reliably, at least in offload mode, on
-  # battery, when tlp is disabled.
+  #       # with RUNTIME_PM_ON_BAT/AC set to defaults, P50/P51 can't go to sleep
+  #       RUNTIME_PM_ON_AC = "on";
+  #       RUNTIME_PM_ON_BAT = "on";
+  #     };
+  #   };
+  # }
   #
-  # All of the above was "solved" by disabling runtime power management.
-  #
-  # External monitor
-  # ----------------
-  #
-  # Connecting an external monitor via the DP port in sync mode does not seem to
-  # make it available.
+  # I'm thinking this is too aggressive to put into shared config, and folks may
+  # be concerned with the hit on battery life.
   #
   # throttled vs. thermald
   # -----------------------
@@ -91,7 +88,7 @@
   # scenarios: under thermald, under throttled, and with neither.  None of the
   # scenarios seem to have massively improved fan behavior, core temps, or
   # average CPU frequency than another.  The highest core temp always seems to
-  # hover around 90 degrees C, the lowest CPU Ghz around 3.4.
+  # hover around 90 degrees C, the lowest CPU Ghz around 3.4 on a 3.8Ghz machine.
   #
   # I ended up choosing throttled because subjectively, the fans seem quieter
   # when it's stressed and it allows the average temps to get a degree or two
