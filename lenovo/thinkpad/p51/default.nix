@@ -43,9 +43,10 @@
   # more granular way to get it working, despite trying to do a per-device
   # binary search via powertop.
   #
-  # My personal configuration to make this work looks like this:
+  # My personal configuration to make sleep work looks like this:
   #
   # {config, lib, ...}:
+  #
   # {
   #   services.tlp = {
   #     settings = {
