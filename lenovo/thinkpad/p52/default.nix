@@ -21,6 +21,9 @@
     };
   };
 
+  # required to make wireless work
+  hardware.enableAllFirmware = true;
+
   # Sleep
   # -----
   #
