@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [
     ../../../common/gpu/nvidia.nix
@@ -21,6 +21,11 @@
       driSupport32Bit = lib.mkDefault true;
     };
   };
+
+  # required to make wireless work
+  environment.systemPackages = [
+    pkgs.linux-firmware
+  ];
 
   # See sleep.nix inside this directory for code that allows the system to
   # sleep properly (out of the box, it will not) at the cost of battery life.
