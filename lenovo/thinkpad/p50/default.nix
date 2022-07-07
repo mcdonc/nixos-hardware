@@ -23,9 +23,7 @@
   };
 
   # required to make wireless work
-  environment.systemPackages = [
-    pkgs.linux-firmware
-  ];
+  hardware.enableAllFirmware = true;
 
   # See sleep.nix inside this directory for code that allows the system to
   # sleep properly (out of the box, it will not) at the cost of battery life.
