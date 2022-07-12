@@ -24,6 +24,9 @@
   # required to make wireless work
   hardware.enableAllFirmware = lib.mkDefault true;
 
+  # silence ACPI "errors" at boot shown before NixOS stage 1 output (default is 4)
+  #boot.consoleLogLevel = 3;
+  
   # throttled vs. thermald
   # -----------------------
   #
