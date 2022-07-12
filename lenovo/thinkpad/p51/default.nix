@@ -27,12 +27,16 @@
   hardware.enableAllFirmware = lib.mkDefault true;
 
   # fix suspend/resume screen corruption in sync mode
-  hardware.nvidia.powerManagement.enable =
-    lib.mkIf (config.hardware.nvidia.prime.sync.enable == true) lib.mkDefault true;
+  hardware.nvidia.powerManagement =
+    lib.mkIf config.hardware.nvidia.prime.sync.enable {
+      enable = lib.mkDefault true;
+    };
 
   # fix screen tearing in sync mode
-  hardware.nvidia.modesetting.enable =
-    lib.mkIf (config.hardware.nvidia.prime.sync.enable == true) lib.mkDefault true;
+  hardware.nvidia.modesetting =
+    lib.mkIf config.hardware.nvidia.prime.sync.enable {
+      enable = lib.mkDefault true;
+    };
   
   # throttled vs. thermald
   # -----------------------

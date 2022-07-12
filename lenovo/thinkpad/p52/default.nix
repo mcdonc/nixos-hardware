@@ -24,12 +24,16 @@
   hardware.enableAllFirmware = lib.mkDefault true;
 
   # fix suspend/resume screen corruption in sync mode
-  hardware.nvidia.powerManagement.enable =
-    lib.mkIf (config.hardware.nvidia.prime.sync.enable) lib.mkDefault true;
+  hardware.nvidia.powerManagement =
+    lib.mkIf config.hardware.nvidia.prime.sync.enable {
+      enable = lib.mkDefault true;
+    };
 
   # fix screen tearing in sync mode
-  hardware.nvidia.modesetting.enable =
-    lib.mkIf (config.hardware.nvidia.prime.sync.enable) lib.mkDefault true;
+  hardware.nvidia.modesetting =
+    lib.mkIf config.hardware.nvidia.prime.sync.enable {
+      enable = lib.mkDefault true;
+    };
 
   # silence ACPI "errors" at boot shown before NixOS stage 1 output (default is 4)
   #boot.consoleLogLevel = 3;
