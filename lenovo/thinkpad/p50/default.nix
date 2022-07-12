@@ -1,5 +1,4 @@
-{ lib, config, ... }:
-{
+{ lib, config, ... }: {
   imports = [
     ../../../common/gpu/nvidia.nix
     ../../../common/cpu/intel
@@ -36,7 +35,7 @@
     lib.mkIf config.hardware.nvidia.prime.sync.enable {
       enable = lib.mkDefault true;
     };
-  
+
   # throttled vs. thermald
   # -----------------------
   #
