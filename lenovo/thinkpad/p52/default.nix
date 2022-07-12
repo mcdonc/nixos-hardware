@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{ lib, config, ... }: {
   imports = [
     ../../../common/gpu/nvidia.nix
     ../../../common/cpu/intel
@@ -24,9 +23,13 @@
   # required to make wireless work
   hardware.enableAllFirmware = lib.mkDefault true;
 
+  # fix suspend/resume screen corruption in sync mode
+  hardware.nvidia.powerManagement.enable =
+    lib.mkIf (config.hardware.nvidia.prime.sync.enable == true) lib.mkDefault true;
+
   # silence ACPI "errors" at boot shown before NixOS stage 1 output (default is 4)
   #boot.consoleLogLevel = 3;
-  
+
   # throttled vs. thermald
   # -----------------------
   #
