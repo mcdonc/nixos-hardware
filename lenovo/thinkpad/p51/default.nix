@@ -30,6 +30,10 @@
   hardware.nvidia.powerManagement.enable =
     lib.mkIf (config.hardware.nvidia.prime.sync.enable == true) lib.mkDefault true;
 
+  # fix screen tearing in sync mode
+  hardware.nvidia.modesetting.enable =
+    lib.mkIf (config.hardware.nvidia.prime.sync.enable == true) lib.mkDefault true;
+  
   # throttled vs. thermald
   # -----------------------
   #
