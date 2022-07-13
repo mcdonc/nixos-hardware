@@ -14,6 +14,7 @@
       };
     };
 
+    # is this too much?  It's convenient for Steam.
     opengl = {
       driSupport = lib.mkDefault true;
       driSupport32Bit = lib.mkDefault true;
